@@ -29,7 +29,6 @@ async def ussd_handler(
     steps = [s for s in text.split("*") if s]
     sess  = session_store.get_or_create(sessionId, phoneNumber)
 
-    # Derive language from step 1 (persisted for logging)
     lang = LANG_EN if (steps and steps[0] == "2") else LANG_SW
     sess.lang = lang
 
@@ -39,18 +38,18 @@ async def ussd_handler(
         rtype, msg = exit_screen(lang)
         return PlainTextResponse(f"{rtype}\n{msg}")
 
-    # Welcome screen
+    # Welcome screen - no input yet
     if not steps:
         rtype, msg = screen("welcome", LANG_SW)
         return PlainTextResponse(f"{rtype}\n{msg}")
 
-    # Language selected - show main menu
+    # Step 1 - language chosen, show main menu
     if len(steps) == 1:
         session_store.update(sess)
         rtype, msg = screen("main", lang)
         return PlainTextResponse(f"{rtype}\n{msg}")
 
-    # Disease selected - show first question
+    # Step 2 - disease chosen, show Q1
     if len(steps) == 2:
         disease = DISEASE_MAP.get(steps[1])
 
@@ -65,7 +64,7 @@ async def ussd_handler(
         rtype, msg = screen(f"{disease}_q1", lang)
         return PlainTextResponse(f"{rtype}\n{msg}")
 
-    # First question answered
+    # Step 3 - Q1 answered
     if len(steps) == 3:
         disease = DISEASE_MAP.get(steps[1])
         if not disease:
@@ -75,22 +74,22 @@ async def ussd_handler(
 
         q1 = steps[2]
 
-        # If answer is no, or BP (single question), give result immediately
-        if not needs_q2(disease) or q1 == "2":
+        # BP + q1=yes means stroke signs - go straight to RED, no Q2 needed
+        if disease == BP and q1 == "1":
             severity = triage(disease, q1)
             session_store.delete(sessionId)
             rtype, msg = result(severity, disease, lang)
             await _log(phoneNumber, sess, disease, severity, msg)
             return PlainTextResponse(f"{rtype}\n{msg}")
 
-        # Answer was yes - ask second question
+        # All other cases - ask Q2
         sess.disease = disease
         sess.q1      = q1
         session_store.update(sess)
         rtype, msg = screen(f"{disease}_q2", lang)
         return PlainTextResponse(f"{rtype}\n{msg}")
 
-    # Second question answered - give final result
+    # Step 4 - Q2 answered, give final result
     if len(steps) >= 4:
         disease = DISEASE_MAP.get(steps[1])
         if not disease:
@@ -106,7 +105,6 @@ async def ussd_handler(
         await _log(phoneNumber, sess, disease, severity, msg)
         return PlainTextResponse(f"{rtype}\n{msg}")
 
-    # Should not reach here
     session_store.delete(sessionId)
     rtype, msg = exit_screen(lang)
     return PlainTextResponse(f"{rtype}\n{msg}")

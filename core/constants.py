@@ -221,39 +221,33 @@ RESULTS = {
     # --- RED CATEGORY (RED) - Immediate help and Reassurance ---
     "red_malaria_sw": (
         END,
-        "MSAADA WA HARAKA\n\n"
-        "Usijali, wahi kituo cha\n"
-        "afya sasa upate msaada.\n"
-        "Dalili hizi zinahitaji\n"
-        "ushauri wa daktari\n"
-        "mapema iwezekanavyo.",
+        "DHARURA - MALARIA KALI\n\n"
+        "Dalili hizi ni hatari sana.\n"
+        "Nenda hospitali SASA HIVI.\n"
+        "Usisubiri hata dakika.\n"
+        "Kila dakika inaokoa\nmaisha.",
     ),
     "red_pneumonia_sw": (
         END,
-        "MSAADA WA HARAKA\n\n"
-        "Usihofu, wahi hospitali\n"
-        "upate msaada wa haraka.\n"
-        "Msaidie mgonjwa kukaa\n"
-        "wima (ameegama) ili\n"
-        "apumue kwa urahisi.",
+        "DHARURA - NIMONIA KALI\n\n"
+        "Mgonjwa anahitaji oksijeni\nna dawa haraka sana.\n"
+        "Nenda hospitali SASA HIVI.\n"
+        "Msaidie kukaa wima\nnjiani.",
     ),
     "red_diarrhea_sw": (
         END,
-        "MSAADA WA HARAKA\n\n"
-        "Usijali, mwili unahitaji\n"
-        "maji. Wahi kituo cha\n"
-        "afya mapema kwa msaada.\n"
-        "Mpe maji kidogo kidogo\n"
-        "wakati mkiwa njiani.",
+        "DHARURA - UPUNGUFU WA MAJI\n\n"
+        "Mwili umepoteza maji mengi.\nHali hii ni ya hatari.\n"
+        "Nenda hospitali SASA.\n"
+        "Mpe maji kidogo kidogo\nnjiani.",
     ),
     "red_bp_sw": (
         END,
-        "MSAADA WA HARAKA\n\n"
-        "Usijali, tulia na msaidie\n"
-        "mgonjwa kukaa wima.\n"
-        "Wahi kituo cha afya sasa.\n"
-        "Omba msaada wa jirani\n"
-        "mgonjwa asikae peke yake.",
+        "DHARURA - DALILI ZA KIHARUSI\n\n"
+        "Hizi ni dalili za ubongo.\n"
+        "Nenda hospitali SASA HIVI.\n"
+        "Omba msaada wa jirani.\n"
+        "Usimkabidhi peke yake.",
     ),
     # --- YELLOW CATEGORY (YELLOW) - Advice and Testing today ---
     "yellow_malaria_sw": (
@@ -320,5 +314,88 @@ RESULTS = {
         "Tunakutakia afya njema.\n"
         "Piga *24929# wakati\n"
         "wowote ukihitaji msaada.",
+    ),
+    # English results
+    "red_malaria_en": (
+        END,
+        "EMERGENCY - SEVERE MALARIA\n\n"
+        "These signs are very\ndangerous. Go to\nhospital RIGHT NOW.\n"
+        "Do not wait. Every\nminute matters.",
+    ),
+    "red_pneumonia_en": (
+        END,
+        "EMERGENCY - SEVERE PNEUMONIA\n\n"
+        "Patient needs oxygen\nand medicine urgently.\n"
+        "Go to hospital\nRIGHT NOW.",
+    ),
+    "red_diarrhea_en": (
+        END,
+        "EMERGENCY - DEHYDRATION\n\n"
+        "Body has lost too much\nwater. Very dangerous.\n"
+        "Go to hospital NOW.\n"
+        "Give small water sips\non the way.",
+    ),
+    "red_bp_en": (
+        END,
+        "EMERGENCY - STROKE SIGNS\n\n"
+        "These are brain emergency\nsigns. Go to hospital\nRIGHT NOW.\n"
+        "Get a neighbour to help.\nDo not leave alone.",
+    ),
+    "yellow_malaria_en": (
+        END,
+        "ADVICE: POSSIBLE MALARIA\n\n"
+        "Do not worry, this is\ntreatable.\n"
+        "1. Visit clinic TODAY\n"
+        "   for a blood test\n"
+        "2. Drink plenty water\n"
+        "3. No medicine before\n"
+        "   seeing a doctor.",
+    ),
+    "yellow_pneumonia_en": (
+        END,
+        "ADVICE: POSSIBLE PNEUMONIA\n\n"
+        "1. Visit clinic today\n"
+        "2. Keep patient upright\n"
+        "3. Keep them warm\n"
+        "4. No medicine before\n"
+        "   being examined.",
+    ),
+    "yellow_diarrhea_en": (
+        END,
+        "ADVICE: DIARRHEA\n\n"
+        "1. Give ORS or sugar-salt\n"
+        "   water right now\n"
+        "2. Visit clinic today\n"
+        "3. Keep breastfeeding\n"
+        "   if infant.",
+    ),
+    "yellow_bp_en": (
+        END,
+        "ADVICE: BLOOD PRESSURE\n\n"
+        "Rest and calm down first.\n"
+        "1. Visit clinic today\n"
+        "   to check BP\n"
+        "2. No medicine without\n"
+        "   proper tests\n"
+        "3. Avoid salt and stress.",
+    ),
+    "green_en": (
+        END,
+        "REST AND MONITOR\n\n"
+        "Symptoms are not\nserious right now.\n"
+        "Rest and drink water.\n"
+        "If you feel worse,\nvisit a health center.",
+    ),
+    "other_en": (
+        END,
+        "MORE HELP NEEDED\n\n"
+        "Please visit the nearest\nhealth center for a\nproper check-up.\n"
+        "It is important to\nsee a doctor today.",
+    ),
+    "exit_en": (
+        END,
+        "Thank you for using\nAfyaMkononi.\n"
+        "We wish you good health.\n"
+        "Dial *24929# anytime\nyou need help.",
     ),
 }

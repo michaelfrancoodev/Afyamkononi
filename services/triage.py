@@ -3,10 +3,13 @@ from core.constants import RED, YELLOW, GREEN
 
 def triage(disease: str, q1: str, q2: str | None = None) -> str:
     """
-    Returns RED, YELLOW, or GREEN based on the disease and answers.
-
+    Returns RED, YELLOW, or GREEN based on disease and answers.
     q1 and q2 are "1" for yes, "2" for no.
-    BP only uses q1 since the first question already covers stroke signs.
+
+    Malaria:   q1=yes + q2=yes -> RED,    q1=yes -> YELLOW,  q1=no -> GREEN
+    Pneumonia: q1=yes + q2=yes -> RED,    q1=yes -> YELLOW,  q1=no -> GREEN
+    Diarrhea:  q1=yes + q2=yes -> RED,    q1=yes -> YELLOW,  q1=no -> GREEN
+    BP:        q1=yes          -> RED,    q1=no  -> q2=yes -> YELLOW, q2=no -> GREEN
     """
     yes = "1"
 
@@ -32,13 +35,17 @@ def triage(disease: str, q1: str, q2: str | None = None) -> str:
         return GREEN
 
     if disease == "bp":
+        # Q1 asks stroke signs - if yes, emergency immediately
         if q1 == yes:
             return RED
-        return YELLOW
+        # Q1 no, Q2 asks severe headache/dizziness
+        if q2 == yes:
+            return YELLOW
+        return GREEN
 
-    # unknown disease - default to yellow so user still gets clinic advice
     return YELLOW
 
 
 def needs_q2(disease: str) -> bool:
-    return disease != "bp"
+    # All diseases now have 2 questions
+    return True
