@@ -48,7 +48,7 @@ async def test_select_english(client):
     async with client as c:
         r = await c.post("/ussd", data=ussd_payload("s3", "+255700000003", "2"))
     assert "CON" in r.text
-    assert "issue" in r.text.lower()    # English main menu
+    assert "problem" in r.text.lower()   # English main menu
 
 
 # ── Malaria flow — RED path ────────────────────────────────────
@@ -119,7 +119,7 @@ async def test_exit_from_main(client):
     async with client as c:
         r = await c.post("/ussd", data=ussd_payload("s10", "+255700000010", "1*0"))
     assert r.text.startswith("END")
-    assert "2392" in r.text
+    assert "24929" in r.text
 
 
 # ── Health ping ────────────────────────────────────────────────

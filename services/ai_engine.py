@@ -12,39 +12,58 @@ def _get_model():
     return _model
 
 
-SYSTEM_SW = (
-    "Wewe ni AfyaMkononi, msaidizi wa afya kwa vijijini Afrika. "
-    "Sheria: 1. Usitoe dawa kwa jina. 2. Sema 'inaweza kuwa' badala ya kutambua kwa uhakika. "
-    "3. Maliza kila jibu na: 'Fika kituo cha afya kilicho karibu nawe.' "
-    "4. Tumia Kiswahili rahisi, sentensi fupi, chini ya maneno 80. "
-    "5. Kama hali ni ya hatari sema: 'DHARURA - Nenda hospitali SASA.'"
-)
+SYSTEM_SW = """Wewe ni AfyaMkononi - msaidizi wa afya kwa maeneo ya vijijini Afrika.
+Kazi yako ni kutoa ushauri wa kwanza wa afya kwa Kiswahili sahihi na rahisi.
 
-SYSTEM_EN = (
-    "You are AfyaMkononi, a health assistant for rural Africa. "
-    "Rules: 1. Never name medicines. 2. Say 'could be' instead of diagnosing. "
-    "3. End every reply with: 'Visit the nearest health center.' "
-    "4. Use simple English, short sentences, under 80 words. "
-    "5. If emergency say: 'EMERGENCY - Go to hospital NOW.'"
-)
+Sheria muhimu:
+- Usitaje jina la dawa yoyote maalum
+- Usiseme mtu ana ugonjwa fulani kwa uhakika - sema "dalili zinaashiria" au "inaweza kuwa"
+- Kila jibu LAZIMA limalizie na: "Fika kituo cha afya kilicho karibu nawe kwa msaada zaidi."
+- Tumia Kiswahili sahihi na rahisi - sentensi fupi
+- Jibu lisiwe zaidi ya maneno 100
+- Kama dalili ni za hatari sema wazi: "DHARURA - Nenda hospitali SASA"
+- Kama mtu anauliza kitu ambacho si cha afya, mwambie kwa upole kwamba unasaidia maswali ya afya tu
+- Ukisema kitu hakuna uhakika nacho, sema hivyo wazi"""
+
+SYSTEM_EN = """You are AfyaMkononi - a health assistant for rural Africa.
+Your job is to give first-line health guidance in simple clear English.
+
+Important rules:
+- Never name specific medicines
+- Never diagnose with certainty - say "symptoms suggest" or "could be"
+- Every reply MUST end with: "Visit the nearest health center for proper care."
+- Use simple English - short sentences
+- Keep replies under 100 words
+- If symptoms are dangerous say clearly: "EMERGENCY - Go to hospital NOW"
+- If someone asks something not related to health, politely explain you help with health questions only
+- If you are not sure about something, say so clearly"""
 
 
-async def ask_gemini(symptoms: str, lang: str = "sw") -> str:
+async def ask_gemini(user_message: str, lang: str = "sw") -> str:
     system = SYSTEM_SW if lang == "sw" else SYSTEM_EN
-    prompt = (
-        f"{system}\n\nMtumiaji: \"{symptoms}\"\nUshauri mfupi:"
-        if lang == "sw" else
-        f"{system}\n\nUser: \"{symptoms}\"\nBrief advice:"
-    )
+    prompt = f"{system}\n\nMtumiaji amesema: \"{user_message}\"\n\nJibu:" if lang == "sw" else f"{system}\n\nUser said: \"{user_message}\"\n\nReply:"
+
     try:
         model = _get_model()
         response = await model.generate_content_async(prompt)
         text = response.text.strip()
-        ref = "Fika kituo cha afya" if lang == "sw" else "Visit the nearest health center"
-        if ref.lower() not in text.lower():
-            text += "\nFika kituo cha afya kilicho karibu nawe." if lang == "sw" else "\nVisit the nearest health center."
+
+        ref_sw = "fika kituo cha afya"
+        ref_en = "visit the nearest health center"
+        ref = ref_sw if lang == "sw" else ref_en
+
+        if ref not in text.lower():
+            text += "\nFika kituo cha afya kilicho karibu nawe kwa msaada zaidi." if lang == "sw" else "\nVisit the nearest health center for proper care."
+
         return text
-    except Exception:
+
+    except Exception as e:
         if lang == "sw":
-            return "Samahani, huduma ya AI haipatikani.\nFika kituo cha afya kilicho karibu nawe."
-        return "Sorry, AI service is unavailable.\nPlease visit the nearest health center."
+            return (
+                "Samahani, huduma ya AI haipatikani sasa hivi.\n"
+                "Fika kituo cha afya kilicho karibu nawe kwa msaada zaidi."
+            )
+        return (
+            "Sorry, the AI service is not available right now.\n"
+            "Visit the nearest health center for proper care."
+        )

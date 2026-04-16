@@ -12,3 +12,8 @@ async def ping():
         "service": "AfyaMkononi",
         "time": datetime.now(timezone.utc).isoformat()
     })
+
+
+@router.get("/health")
+async def health():
+    return JSONResponse({"status": "ok"})
