@@ -26,53 +26,51 @@ LANG_EN = "en"
 
 
 SCREENS = {
-    # Welcome screen and language selection
+    # Welcome screen - simple and friendly
     "welcome_sw": (
         CON,
-        "Karibu AfyaMkononi\n"
-        "Msaada wa afya bila\ninternet\n\n"
-        "Chagua lugha yako:\n"
+        "Karibu AfyaMkononi!\n\n"
+        "Chagua lugha:\n"
         "1. Kiswahili\n"
         "2. English",
     ),
     
     "welcome_en": (
         CON,
-        "Welcome to AfyaMkononi\n"
-        "Health help, no internet\n\n"
-        "Choose your language:\n"
+        "Welcome to AfyaMkononi!\n\n"
+        "Choose language:\n"
         "1. Kiswahili\n"
         "2. English",
     ),
 
-    # Main menu
+    # Main menu - clear options
     "main_sw": (
         CON,
-        "Una tatizo gani leo?\n\n"
-        "1. Homa au maumivu mwili\n"
-        "2. Kikohozi au pumzi ngumu\n"
-        "3. Kuhara au kutapika\n"
-        "4. Kizunguzungu au shinikizo\n"
-        "5. Dalili nyingine\n"
+        "Una tatizo gani?\n\n"
+        "1. Homa/Joto mwilini\n"
+        "2. Kikohozi/Pumzi shida\n"
+        "3. Kuhara/Kutapika\n"
+        "4. Kizunguzungu/Presha\n"
+        "5. Lingine\n\n"
         "0. Toka",
     ),
 
     "main_en": (
         CON,
-        "What is your problem today?\n\n"
-        "1. Fever or body pain\n"
-        "2. Cough or breathing problems\n"
-        "3. Diarrhea or vomiting\n"
-        "4. Dizziness or blood pressure\n"
-        "5. Other symptoms\n"
+        "What's your problem?\n\n"
+        "1. Fever/Body heat\n"
+        "2. Cough/Breathing\n"
+        "3. Diarrhea/Vomiting\n"
+        "4. Dizziness/BP\n"
+        "5. Other\n\n"
         "0. Exit",
     ),
 
-    # --- MALARIA ---
+    # --- MALARIA/FEVER ---
     "malaria_q1_sw": (
         CON,
         "HOMA\n\n"
-        "Je, una homa inayokuja\nna kuondoka, baridi au\nkutetemeka mwili?\n\n"
+        "Una baridi au kutetemeka?\n\n"
         "1. Ndiyo\n"
         "2. Hapana\n"
         "0. Rudi",
@@ -81,7 +79,7 @@ SCREENS = {
     "malaria_q1_en": (
         CON,
         "FEVER\n\n"
-        "Do you have fluctuating\nfever, chills, or\nshivering?\n\n"
+        "Have chills or shivering?\n\n"
         "1. Yes\n"
         "2. No\n"
         "0. Back",
@@ -89,8 +87,8 @@ SCREENS = {
 
     "malaria_q2_sw": (
         CON,
-        "HOMA (HATARI)\n\n"
-        "Je, unachanganyikiwa,\nmacho ni ya njano, au\nhuwezi kuamka kabisa?\n\n"
+        "HOMA - Maswali Zaidi\n\n"
+        "Unachanganyikiwa au\nmacho ni ya njano?\n\n"
         "1. Ndiyo\n"
         "2. Hapana\n"
         "0. Rudi",
@@ -98,18 +96,18 @@ SCREENS = {
 
     "malaria_q2_en": (
         CON,
-        "FEVER (DANGER)\n\n"
-        "Are you confused,\nhave yellow eyes, or\nunable to wake up?\n\n"
+        "FEVER - More Questions\n\n"
+        "Confused or yellow eyes?\n\n"
         "1. Yes\n"
         "2. No\n"
         "0. Back",
     ),
 
-    # --- PNEUMONIA ---
+    # --- PNEUMONIA/COUGH ---
     "pneumonia_q1_sw": (
         CON,
         "KIKOHOZI\n\n"
-        "Je, unapumua haraka au\nkwa shida sana kuliko\nkawaida?\n\n"
+        "Pumzi ni ngumu kuliko\nkawaida?\n\n"
         "1. Ndiyo\n"
         "2. Hapana\n"
         "0. Rudi",
@@ -118,7 +116,7 @@ SCREENS = {
     "pneumonia_q1_en": (
         CON,
         "COUGH\n\n"
-        "Is your breathing\nfaster or much more\ndifficult than usual?\n\n"
+        "Breathing harder than\nnormal?\n\n"
         "1. Yes\n"
         "2. No\n"
         "0. Back",
@@ -126,8 +124,8 @@ SCREENS = {
 
     "pneumonia_q2_sw": (
         CON,
-        "KIKOHOZI (HATARI)\n\n"
-        "Je, mbavu zinaingia\nndani sana wakati wa\nkuvuta pumzi?\n\n"
+        "KIKOHOZI - Maswali Zaidi\n\n"
+        "Mbavu zinaingia ndani\nukipumua?\n\n"
         "1. Ndiyo\n"
         "2. Hapana\n"
         "0. Rudi",
@@ -135,8 +133,8 @@ SCREENS = {
 
     "pneumonia_q2_en": (
         CON,
-        "COUGH (DANGER)\n\n"
-        "Are the ribs pulling\nin deeply while\nbreathing?\n\n"
+        "COUGH - More Questions\n\n"
+        "Ribs pulling in when\nbreathing?\n\n"
         "1. Yes\n"
         "2. No\n"
         "0. Back",
@@ -146,7 +144,7 @@ SCREENS = {
     "diarrhea_q1_sw": (
         CON,
         "KUHARA\n\n"
-        "Je, unaharisha maji\nmara 3 au zaidi leo?\n\n"
+        "Unaenda haja kubwa maji\nmara 3+ leo?\n\n"
         "1. Ndiyo\n"
         "2. Hapana\n"
         "0. Rudi",
@@ -155,7 +153,7 @@ SCREENS = {
     "diarrhea_q1_en": (
         CON,
         "DIARRHEA\n\n"
-        "Are you passing watery\nstool 3 or more\ntimes today?\n\n"
+        "Watery stool 3+ times\ntoday?\n\n"
         "1. Yes\n"
         "2. No\n"
         "0. Back",
@@ -163,8 +161,8 @@ SCREENS = {
 
     "diarrhea_q2_sw": (
         CON,
-        "KUHARA (HATARI)\n\n"
-        "Je, macho yamezama,\nhauna mkojo, au kuna\ndamu kwenye choo?\n\n"
+        "KUHARA - Maswali Zaidi\n\n"
+        "Macho yamezama, hauna\nmkojo, au damu kwenye\nchoo?\n\n"
         "1. Ndiyo\n"
         "2. Hapana\n"
         "0. Rudi",
@@ -172,18 +170,18 @@ SCREENS = {
 
     "diarrhea_q2_en": (
         CON,
-        "DIARRHEA (DANGER)\n\n"
-        "Are eyes sunken,\nno urination, or\nblood in stool?\n\n"
+        "DIARRHEA - More Questions\n\n"
+        "Sunken eyes, no urine,\nor blood in stool?\n\n"
         "1. Yes\n"
         "2. No\n"
         "0. Back",
     ),
 
-    # --- BLOOD PRESSURE (BP) ---
+    # --- BLOOD PRESSURE ---
     "bp_q1_sw": (
         CON,
-        "PRESHA (HATARI)\n\n"
-        "Je, una ganzi, uso\nkulegea, au shida ya\nkuongea ghafla?\n\n"
+        "PRESHA\n\n"
+        "Una ganzi, uso kulegea,\nau shida kuongea ghafla?\n\n"
         "1. Ndiyo\n"
         "2. Hapana\n"
         "0. Rudi",
@@ -191,8 +189,8 @@ SCREENS = {
 
     "bp_q1_en": (
         CON,
-        "BP (DANGER)\n\n"
-        "Do you have numbness,\nface drooping, or\nsudden speech trouble?\n\n"
+        "BP\n\n"
+        "Numbness, face drooping,\nor sudden speech trouble?\n\n"
         "1. Yes\n"
         "2. No\n"
         "0. Back",
@@ -200,8 +198,8 @@ SCREENS = {
 
     "bp_q2_sw": (
         CON,
-        "PRESHA\n\n"
-        "Je, kichwa kinauma\nsana (kisogoni) au una\nkizunguzungu kikali?\n\n"
+        "PRESHA - Maswali Zaidi\n\n"
+        "Kichwa kinauma sana au\nkizunguzungu kikali?\n\n"
         "1. Ndiyo\n"
         "2. Hapana\n"
         "0. Rudi",
@@ -209,8 +207,8 @@ SCREENS = {
 
     "bp_q2_en": (
         CON,
-        "BP\n\n"
-        "Severe headache\n(at the back) or\nsevere dizziness?\n\n"
+        "BP - More Questions\n\n"
+        "Severe headache or\ndizziness?\n\n"
         "1. Yes\n"
         "2. No\n"
         "0. Back",
@@ -218,184 +216,162 @@ SCREENS = {
 }
 
 RESULTS = {
-    # --- RED CATEGORY (RED) - Immediate help and Reassurance ---
+    # --- DHARURA (RED) - Hospitali SASA ---
     "red_malaria_sw": (
         END,
-        "DHARURA - MALARIA KALI\n\n"
-        "Dalili hizi ni hatari sana.\n"
-        "Nenda hospitali SASA HIVI.\n"
-        "Usisubiri hata dakika.\n"
-        "Kila dakika inaokoa\nmaisha.",
+        "DHARURA!\n\n"
+        "Dalili za malaria kali.\n"
+        "Hospitali SASA!\n"
+        "Usisubiri.",
     ),
     "red_pneumonia_sw": (
         END,
-        "DHARURA - NIMONIA KALI\n\n"
-        "Mgonjwa anahitaji oksijeni\nna dawa haraka sana.\n"
-        "Nenda hospitali SASA HIVI.\n"
-        "Msaidie kukaa wima\nnjiani.",
+        "DHARURA!\n\n"
+        "Dalili za nimonia kali.\n"
+        "Hospitali SASA!\n"
+        "Msaidie kukaa wima.",
     ),
     "red_diarrhea_sw": (
         END,
-        "DHARURA - UPUNGUFU WA MAJI\n\n"
-        "Mwili umepoteza maji mengi.\nHali hii ni ya hatari.\n"
-        "Nenda hospitali SASA.\n"
-        "Mpe maji kidogo kidogo\nnjiani.",
+        "DHARURA!\n\n"
+        "Mwili umekosa maji.\n"
+        "Hospitali SASA!\n"
+        "Mpe maji kidogo njiani.",
     ),
     "red_bp_sw": (
         END,
-        "DHARURA - DALILI ZA KIHARUSI\n\n"
-        "Hizi ni dalili za ubongo.\n"
-        "Nenda hospitali SASA HIVI.\n"
-        "Omba msaada wa jirani.\n"
-        "Usimkabidhi peke yake.",
+        "DHARURA!\n\n"
+        "Dalili za kiharusi.\n"
+        "Hospitali SASA!\n"
+        "Omba msaada wa jirani.",
     ),
-    # --- YELLOW CATEGORY (YELLOW) - Advice and Testing today ---
+    
+    # --- USHAURI (YELLOW) - Zahanati leo ---
     "yellow_malaria_sw": (
         END,
-        "USHAURI: MALARIA\n\n"
-        "Usijali, hali hii inatibika.\n"
-        "1. Fika kituo cha afya leo\n"
-        "   upate kipimo cha malaria\n"
-        "2. Kunywa maji mengi\n"
-        "3. Usitumie dawa bila\n"
-        "   majibu ya daktari.",
+        "USHAURI - Malaria\n\n"
+        "Fika zahanati leo upimwe.\n"
+        "Kunywa maji mengi.\n"
+        "Usitumie dawa bila kipimo.",
     ),
     "yellow_pneumonia_sw": (
         END,
-        "USHAURI: NIMONIA\n\n"
-        "Pole sana, utapona.\n"
-        "1. Fika kituoni leo\n"
-        "2. Msaidie kukaa wima\n"
-        "3. Hakikisha ana joto\n"
-        "4. Usitumie dawa yoyote\n"
-        "   kabla ya kupimwa.",
+        "USHAURI - Kikohozi\n\n"
+        "Fika zahanati leo.\n"
+        "Kaa wima, sio kulala.\n"
+        "Hakikisha una joto.",
     ),
     "yellow_diarrhea_sw": (
         END,
-        "USHAURI: KUHARA\n\n"
-        "Usijali, utapata nafuu.\n"
-        "1. Mpe ORS au maji ya\n"
-        "   chumvi na sukari sasa\n"
-        "2. Fika zahanati leo\n"
-        "3. Mtoto azidi kunyonyeshwa.",
+        "USHAURI - Kuhara\n\n"
+        "Mpe ORS au maji+chumvi+sukari.\n"
+        "Fika zahanati leo.\n"
+        "Mtoto aendelee kunyonya.",
     ),
     "yellow_bp_sw": (
         END,
-        "USHAURI: PRESHA\n\n"
-        "Tulia na pumzika kwanza.\n"
-        "1. Fika kituo cha afya leo\n"
-        "   kupima shinikizo (BP)\n"
-        "2. Usinywe dawa yoyote\n"
-        "   bila vipimo sahihi\n"
-        "3. Epuka chumvi na kelele.",
+        "USHAURI - Presha\n\n"
+        "Pumzika kwanza.\n"
+        "Fika zahanati kupima BP.\n"
+        "Epuka chumvi na stress.",
     ),
-    # --- GREEN CATEGORY (GREEN) - Rest and Monitoring ---
+    
+    # --- MAPUMZIKO (GREEN) ---
     "green_sw": (
         END,
-        "MAPUMZIKO\n\n"
-        "Dalili hizi si za dharura.\n"
+        "Poa, si dharura.\n\n"
         "Pumzika na kunywa maji.\n"
-        "Hali ikibadilika au\n"
-        "ukijihisi vibaya zaidi,\n"
-        "fika kituo cha afya.",
+        "Ukijihisi vibaya zaidi,\n"
+        "fika zahanati.",
     ),
-    # --- UNRECOGNIZED SYMPTOMS AND EXIT ---
+    
+    # --- EXIT na OTHER ---
     "other_sw": (
         END,
-        "MSAADA ZAIDI\n\n"
-        "Tafadhali fika zahanati\n"
+        "Fika zahanati leo\n"
         "kwa uchunguzi zaidi.\n"
-        "Ni muhimu mgonjwa amuone\n"
-        "daktari leo kwa usalama.",
+        "Daktari atakusaidia.",
     ),
     "exit_sw": (
         END,
-        "Asante kwa kututumia.\n"
+        "Asante!\n"
         "Tunakutakia afya njema.\n"
-        "Piga *24929# wakati\n"
-        "wowote ukihitaji msaada.",
+        "Piga *24929# ukihitaji.",
     ),
-    # English results
+    
+    # --- ENGLISH RESULTS ---
     "red_malaria_en": (
         END,
-        "EMERGENCY - SEVERE MALARIA\n\n"
-        "These signs are very\ndangerous. Go to\nhospital RIGHT NOW.\n"
-        "Do not wait. Every\nminute matters.",
+        "EMERGENCY!\n\n"
+        "Severe malaria signs.\n"
+        "Hospital NOW!\n"
+        "Don't wait.",
     ),
     "red_pneumonia_en": (
         END,
-        "EMERGENCY - SEVERE PNEUMONIA\n\n"
-        "Patient needs oxygen\nand medicine urgently.\n"
-        "Go to hospital\nRIGHT NOW.",
+        "EMERGENCY!\n\n"
+        "Severe pneumonia signs.\n"
+        "Hospital NOW!\n"
+        "Keep patient upright.",
     ),
     "red_diarrhea_en": (
         END,
-        "EMERGENCY - DEHYDRATION\n\n"
-        "Body has lost too much\nwater. Very dangerous.\n"
-        "Go to hospital NOW.\n"
-        "Give small water sips\non the way.",
+        "EMERGENCY!\n\n"
+        "Severe dehydration.\n"
+        "Hospital NOW!\n"
+        "Give small water sips.",
     ),
     "red_bp_en": (
         END,
-        "EMERGENCY - STROKE SIGNS\n\n"
-        "These are brain emergency\nsigns. Go to hospital\nRIGHT NOW.\n"
-        "Get a neighbour to help.\nDo not leave alone.",
+        "EMERGENCY!\n\n"
+        "Stroke signs detected.\n"
+        "Hospital NOW!\n"
+        "Get help from neighbor.",
     ),
     "yellow_malaria_en": (
         END,
-        "ADVICE: POSSIBLE MALARIA\n\n"
-        "Do not worry, this is\ntreatable.\n"
-        "1. Visit clinic TODAY\n"
-        "   for a blood test\n"
-        "2. Drink plenty water\n"
-        "3. No medicine before\n"
-        "   seeing a doctor.",
+        "ADVICE - Fever\n\n"
+        "Visit clinic today for test.\n"
+        "Drink lots of water.\n"
+        "No medicine without test.",
     ),
     "yellow_pneumonia_en": (
         END,
-        "ADVICE: POSSIBLE PNEUMONIA\n\n"
-        "1. Visit clinic today\n"
-        "2. Keep patient upright\n"
-        "3. Keep them warm\n"
-        "4. No medicine before\n"
-        "   being examined.",
+        "ADVICE - Cough\n\n"
+        "Visit clinic today.\n"
+        "Stay upright, not lying.\n"
+        "Keep warm.",
     ),
     "yellow_diarrhea_en": (
         END,
-        "ADVICE: DIARRHEA\n\n"
-        "1. Give ORS or sugar-salt\n"
-        "   water right now\n"
-        "2. Visit clinic today\n"
-        "3. Keep breastfeeding\n"
-        "   if infant.",
+        "ADVICE - Diarrhea\n\n"
+        "Give ORS or water+salt+sugar.\n"
+        "Visit clinic today.\n"
+        "Keep breastfeeding baby.",
     ),
     "yellow_bp_en": (
         END,
-        "ADVICE: BLOOD PRESSURE\n\n"
-        "Rest and calm down first.\n"
-        "1. Visit clinic today\n"
-        "   to check BP\n"
-        "2. No medicine without\n"
-        "   proper tests\n"
-        "3. Avoid salt and stress.",
+        "ADVICE - BP\n\n"
+        "Rest first.\n"
+        "Visit clinic to check BP.\n"
+        "Avoid salt and stress.",
     ),
     "green_en": (
         END,
-        "REST AND MONITOR\n\n"
-        "Symptoms are not\nserious right now.\n"
+        "Not urgent.\n\n"
         "Rest and drink water.\n"
-        "If you feel worse,\nvisit a health center.",
+        "If worse, visit clinic.",
     ),
     "other_en": (
         END,
-        "MORE HELP NEEDED\n\n"
-        "Please visit the nearest\nhealth center for a\nproper check-up.\n"
-        "It is important to\nsee a doctor today.",
+        "Visit clinic today\n"
+        "for proper check-up.\n"
+        "Doctor will help.",
     ),
     "exit_en": (
         END,
-        "Thank you for using\nAfyaMkononi.\n"
-        "We wish you good health.\n"
-        "Dial *24929# anytime\nyou need help.",
+        "Thank you!\n"
+        "Stay healthy.\n"
+        "Dial *24929# if needed.",
     ),
 }

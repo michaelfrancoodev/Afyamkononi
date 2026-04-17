@@ -37,17 +37,24 @@ async def sms_handler(
             
         parsed = parse(text.strip())
         lang   = parsed["lang"]
+        
+        logger.info(f"Parsed SMS: lang={lang}, emergency={parsed['is_emergency']}, greeting={parsed.get('is_greeting', False)}")
 
+        # Determine reply based on parse results
         if parsed["is_emergency"]:
             reply = parsed["response"]
-            await _log(sender, lang, None, "red", reply)
+            severity = "red"
+        elif parsed.get("is_greeting"):
+            reply = parsed["response"]
+            severity = "green"
         elif parsed["use_ai"]:
-            reply = await ask_gemini(text, lang)
+            reply = await ask_gemini(text.strip(), lang)
+            severity = _guess_severity(reply)
         else:
             reply = parsed["response"]
+            severity = _guess_severity(reply)
 
-        disease  = parsed.get("disease")
-        severity = _guess_severity(reply)
+        disease = parsed.get("disease")
 
         await _log(sender, lang, disease, severity, reply)
         
