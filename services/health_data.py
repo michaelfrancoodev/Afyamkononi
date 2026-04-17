@@ -472,8 +472,9 @@ SMS_KEYWORDS = {
         "kukojoa", "urinate", "vidonda", "wounds", "kutetemeka", "shaking"
     ],
     "dizziness": [
-        "kizunguzungu", "dizzy", "kuona kiza", "darkness", "kuishiwa nguvu",
-        "weak", "kuanguka", "falling", "kuzimia", "faint", "jasho baridi"
+        "kizunguzungu", "dizzy", "kuona kiza", "naona kiza", "kiza", "darkness", 
+        "kuishiwa nguvu", "kuishiwa", "nguvu", "weak", "kuanguka", "falling", 
+        "kuzimia", "faint", "jasho baridi", "nahisi dhaifu", "dhaifu", "kusinzia"
     ],
     "pregnancy": [
         "mjamzito", "pregnant", "mimba", "ujauzito", "pregnancy", "uzazi",
