@@ -255,8 +255,12 @@ def _fallback(msg: str, lang: str) -> str:
     m = msg.lower()
     
     if lang == "sw":
-        # KIZUNGUZUNGU/WEAKNESS
-        if any(w in m for w in ["kizunguzungu", "kuona kiza", "kuishiwa nguvu", "kuanguka", "kuzimia", "kunzimia", "nahisi dhaifu"]):
+        # DHARURA/EMERGENCY - Check first!
+        if any(w in m for w in ["degedege", "kifafa", "kupoteza fahamu", "amezimia", "hazungumzi"]):
+            return "DHARURA! Hali hii ni hatari sana. Mlaze upande, usimfunge kitu mdomoni. PIGA SIMU 114 AU FIKA HOSPITALI SASA!"
+        
+        # KIZUNGUZUNGU/WEAKNESS - expanded keywords
+        if any(w in m for w in ["kizunguzungu", "kuona kiza", "naona kiza", "kiza", "kuishiwa nguvu", "kuishiwa", "nguvu", "kuanguka", "kuzimia", "kunzimia", "nahisi dhaifu", "dhaifu", "kusinzia"]):
             return "Dalili hizi zinaweza kuwa presha chini au sukari chini. Lala chini sasa, kunywa maji na sukari kidogo. Fika kituo cha afya kupima presha na damu."
         
         # HOMA/FEVER
@@ -307,6 +311,10 @@ def _fallback(msg: str, lang: str) -> str:
         return "Niambie dalili zako vizuri nikuasaidie. Mfano: 'nina homa' au 'kichwa kinauma'. Mimi ni mshauri wa afya - fika kituo cha afya kwa uchunguzi kamili."
     
     else:  # English
+        # EMERGENCY - Check first!
+        if any(w in m for w in ["convulsion", "seizure", "unconscious", "not breathing", "collapsed"]):
+            return "EMERGENCY! This is very dangerous. Lay them on their side, don't put anything in mouth. CALL 114 OR GO TO HOSPITAL NOW!"
+        
         # DIZZINESS/WEAKNESS
         if any(w in m for w in ["dizzy", "dizziness", "faint", "weak", "darkness", "falling"]):
             return "These symptoms could be low BP or low sugar. Lie down now, drink water with sugar. Visit a health center to check BP and blood."
