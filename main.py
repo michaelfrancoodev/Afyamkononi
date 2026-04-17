@@ -1,3 +1,8 @@
+"""
+AfyaMkononi v3.0 - SMS Health Assistant
+Production-ready AI health advisor for East Africa
+"""
+
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="AfyaMkononi",
-    description="AI health assistant for rural Africa via SMS",
-    version="2.0.0",
+    description="AI health assistant for East Africa via SMS - Accurate, Conversational, Helpful",
+    version="3.0.0",
 )
 
 app.add_middleware(
@@ -26,6 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# SMS only - USSD removed
 app.include_router(health_router)
 app.include_router(sms_router)
 app.include_router(app_router)
@@ -33,14 +39,15 @@ app.include_router(app_router)
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info("AfyaMkononi backend started successfully")
+    logger.info("AfyaMkononi v3.0 - SMS Health Assistant started")
 
 
 @app.get("/")
 async def root():
     return {
         "service": "AfyaMkononi",
-        "version": "2.0.0",
+        "version": "3.0.0",
         "channel": "sms",
+        "description": "AI Health Assistant for East Africa",
         "docs": "/docs",
     }
