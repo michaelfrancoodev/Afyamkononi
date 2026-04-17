@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Form
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, JSONResponse
 import logging
 
 from services.sms_parser import parse
 from services.ai_engine import ask_gemini
+from services.at_sms import send_sms
 from database.queries import save_consultation
 
 router = APIRouter()
@@ -17,15 +18,22 @@ async def sms_handler(
     text:   str = Form(None),
     date:   str = Form(""),
 ):
+    """Handle incoming SMS from Africa's Talking callback.
+    
+    Africa's Talking sends incoming SMS to this endpoint.
+    We process the message and send a reply via the AT SMS API.
+    """
     try:
-        logger.info(f"SMS request: from={sender}, to={to}, text={text}")
+        logger.info(f"SMS received: from={sender}, to={to}, text={text}")
         
         # Validate required fields
         if not text:
-            return PlainTextResponse("Tafadhali tuma ujumbe wako. Mfano: nina homa kali")
+            logger.warning("SMS received with no text")
+            return JSONResponse({"status": "error", "message": "No text received"})
         
         if not sender:
-            sender = "unknown"
+            logger.warning("SMS received with no sender")
+            return JSONResponse({"status": "error", "message": "No sender"})
             
         parsed = parse(text.strip())
         lang   = parsed["lang"]
@@ -33,9 +41,7 @@ async def sms_handler(
         if parsed["is_emergency"]:
             reply = parsed["response"]
             await _log(sender, lang, None, "red", reply)
-            return PlainTextResponse(reply)
-
-        if parsed["use_ai"]:
+        elif parsed["use_ai"]:
             reply = await ask_gemini(text, lang)
         else:
             reply = parsed["response"]
@@ -44,11 +50,20 @@ async def sms_handler(
         severity = _guess_severity(reply)
 
         await _log(sender, lang, disease, severity, reply)
-        return PlainTextResponse(reply)
+        
+        # Send reply via Africa's Talking SMS API
+        sent = await send_sms(sender, reply)
+        
+        if sent:
+            logger.info(f"SMS reply sent to {sender}")
+            return JSONResponse({"status": "success", "message": "Reply sent"})
+        else:
+            logger.error(f"Failed to send SMS reply to {sender}")
+            return JSONResponse({"status": "error", "message": "Failed to send reply"})
         
     except Exception as e:
         logger.error(f"SMS error: {e}", exc_info=True)
-        return PlainTextResponse("Samahani, kuna tatizo la kiufundi. Tafadhali jaribu tena baadaye.")
+        return JSONResponse({"status": "error", "message": str(e)})
 
 
 def _guess_severity(text: str) -> str:
