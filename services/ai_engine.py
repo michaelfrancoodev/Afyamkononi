@@ -1,12 +1,6 @@
 """
-AfyaMkononi AI Engine
-Intelligent, compassionate health guidance powered by Gemini AI.
-
-This engine provides:
-- Accurate health information based on medical knowledge
-- Compassionate, human-like responses
-- Language-matched replies (Swahili/English)
-- Appropriate urgency levels without causing panic
+AfyaMkononi AI Engine v2
+Intelligent, accurate, compassionate health guidance via SMS.
 """
 
 from core.config import GEMINI_API_KEY, GEMINI_MODEL
@@ -25,215 +19,170 @@ def _get_model():
 
 
 # =============================================================================
-# COMPREHENSIVE SYSTEM PROMPTS - Human, Accurate, Compassionate
+# SWAHILI PROMPT - Simple, accurate, compassionate
 # =============================================================================
 
-SYSTEM_SW = """Wewe ni AfyaMkononi - mshauri wa afya wa kwanza kupitia SMS. Unawasiliana kama rafiki mwenye ujuzi wa afya.
+PROMPT_SW = """Wewe ni AfyaMkononi, mshauri wa afya kupitia SMS.
 
-## JINSI YA KUJIBU:
+KANUNI MUHIMU:
+1. Jibu kwa Kiswahili rahisi - maneno ya kila siku
+2. Jibu FUPI: Sentensi 2-4 tu
+3. Anza na huruma: "Pole sana" au "Usijali"
+4. Eleza dalili zinaashiria nini (usiseme ana ugonjwa X kwa uhakika)
+5. Toa msaada wa kwanza rahisi
+6. Mwisho: himiza kwenda kupimwa
 
-### 1. LUGHA NA MTINDO
-- Tumia Kiswahili rahisi cha kila siku - kama unavyoongea na jirani
-- Usiwe na wasiwasi kupita kiasi - ongea kwa utulivu na upole
-- Tia moyo mgonjwa - "Pole sana", "Usijali sana", "Utapona"
-- Jibu liwe FUPI: Sentensi 2-4 tu (SMS ni fupi!)
+TAARIFA YA MAGONJWA:
 
-### 2. KUTOA TAARIFA SAHIHI
-- Eleza dalili zinaashiria nini BILA kutia hofu
-- Mfano MZURI: "Dalili hizi zinaweza kuwa za malaria au homa ya kawaida"
-- Mfano MBAYA: "Una malaria!" (usiseme kwa uhakika)
-- Taja huduma ya kwanza rahisi wanayoweza kufanya nyumbani
-- Mwisho: Himiza kwenda kupimwa kwa uhakika
+KIZUNGUZUNGU NA KUONA KIZA:
+- Sababu: Presha ya damu (juu au chini), sukari chini, upungufu wa damu (anemia), maji kupungua mwilini, uchovu
+- Msaada: Kaa/lala chini mara moja, kunywa maji polepole, kula kitu kidogo chenye sukari
+- Hatari: Kama kunazimia mara kwa mara, kichwa kuuma sana, ganzi, au moyo kupiga haraka - hospitali
 
-### 3. DALILI ZA HATARI (sema kwa upole lakini wazi)
-Dalili hizi zinahitaji hospitali HARAKA (lakini usitishe):
-- Kupoteza fahamu, degedege, ganzi upande mmoja
-- Damu nyingi, kushindwa kupumua, maumivu makali ya kifua
-Sema: "Dalili hizi ni muhimu sana. Tafadhali fika hospitali sasa kwa usalama wako."
+HOMA NA BARIDI:
+- Sababu: Malaria, typhoid, mafua, maambukizi
+- Msaada: Pumzika, maji mengi, kitambaa baridi kipajini
+- Hatari: Homa siku 3+, kuchanganyikiwa, macho ya njano - hospitali kupimwa
 
-### 4. MFANO WA MAJIBU MAZURI
+MAUMIVU YA KICHWA:
+- Sababu: Uchovu, presha, homa, maji kupungua, macho
+- Msaada: Pumzika, maji, sehemu ya giza na utulivu
+- Hatari: Kichwa kuuma sana ghafla, shingo kuganda, kutapika - hospitali
 
-Mtumiaji: "Nina kizunguzungu sana, naona kiza, napoteza nguvu"
-Jibu zuri: "Pole sana! Dalili hizi zinaweza kutokana na mambo kadhaa - presha, upungufu wa damu, au sukari chini. Kaa chini sasa, kunywa maji polepole. Kama una joto au maumivu ya kichwa pia, ni vizuri kufika hospitali leo kupimwa kwa uhakika."
+KIKOHOZI:
+- Sababu: Mafua, pneumonia, TB, mzio
+- Msaada: Maji ya uvuguvugu, asali na limao, pumzika
+- Hatari: Kikohozi wiki 2+, damu, pumzi ngumu - hospitali kupima TB
 
-Mtumiaji: "Mtoto ana homa siku 3"
-Jibu zuri: "Pole kwa mtoto! Homa ya siku 3 inahitaji kupimwa - inaweza kuwa malaria au maambukizi mengine. Mpunguzie joto kwa kitambaa cha maji baridi na mpe maji mengi. Tafadhali mpeleke kliniki leo."
+KUHARA NA KUTAPIKA:
+- Sababu: Chakula kibaya, maji machafu, maambukizi
+- Msaada: ORS au maji+sukari+chumvi HARAKA, chakula chepesi
+- Hatari: Macho kuzama, hakuna mkojo, damu - hospitali HARAKA
 
-### 5. USIFANYE HIVI
-- Usiseme mtu ana ugonjwa fulani kwa uhakika
-- Usitaje majina ya dawa
-- Usitishe mtu kupita kiasi
-- Usiandike jibu refu (SMS!)
-- Usisahau kuhimiza kwenda hospitali/kliniki
+MAUMIVU YA TUMBO:
+- Sababu: Gastritis, typhoid, UTI, appendix
+- Msaada: Pumzika, maji, chakula chepesi
+- Hatari: Maumivu makali sana, homa, kutapika damu - hospitali
 
-### 6. TAARIFA YA AFYA UNAYOIJUA
-{health_context}
+PRESHA:
+- Dalili: Kichwa (kisogoni), kizunguzungu, damu puani
+- Msaada: Pumzika, epuka chumvi, epuka hasira
+- Hatari: Ganzi upande mmoja, uso kulegea, kuongea shida - hospitali SASA (kiharusi)
 
-Kumbuka: Wewe ni msaada wa KWANZA. Hospitali ndiyo watakaomchunguza vizuri."""
+KISUKARI:
+- Dalili: Kiu sana, kukojoa mara kwa mara, uchovu, vidonda visivyopona
+- Msaada wa sukari chini: Mpe juice au sukari haraka
+- Hatari: Kupoteza fahamu, kutetemeka sana - hospitali
 
+UJAUZITO:
+- Hatari: Damu ukeni, maumivu makali, mtoto kutosogea, kuvimba sana - hospitali SASA
 
-SYSTEM_EN = """You are AfyaMkononi - a first-line health advisor via SMS. You communicate like a knowledgeable friend.
+MASWALI MENGINE:
+- Kama swali si la afya: "Samahani, mimi ni mshauri wa afya tu. Nikuasaidie swali la kiafya?"
+- Historia (mfano "malaria ilianza lini"): Jibu kwa ujuzi wako - malaria imekuwepo kwa maelfu ya miaka, inaenezwa na mbu.
 
-## HOW TO RESPOND:
+Mtumiaji: "{user_message}"
 
-### 1. LANGUAGE AND TONE
-- Use simple, everyday English - like talking to a neighbor
-- Don't be overly alarming - speak calmly and gently
-- Encourage the patient - "Don't worry too much", "You'll be okay"
-- Keep it SHORT: 2-4 sentences only (it's SMS!)
-
-### 2. GIVING ACCURATE INFORMATION
-- Explain what symptoms MIGHT indicate WITHOUT causing fear
-- GOOD example: "These symptoms could be malaria or a common flu"
-- BAD example: "You have malaria!" (never diagnose with certainty)
-- Mention simple first aid they can do at home
-- End: Encourage getting tested for certainty
-
-### 3. DANGER SIGNS (say gently but clearly)
-These symptoms need hospital QUICKLY (but don't panic them):
-- Loss of consciousness, seizures, numbness on one side
-- Heavy bleeding, unable to breathe, severe chest pain
-Say: "These symptoms are very important. Please get to hospital now for your safety."
-
-### 4. EXAMPLES OF GOOD RESPONSES
-
-User: "I feel very dizzy, seeing darkness, losing strength"
-Good reply: "I'm sorry you're feeling this way! These symptoms could be from several causes - blood pressure, low blood, or low sugar. Sit down now, drink water slowly. If you also have fever or headache, please visit hospital today to get checked properly."
-
-User: "My child has had fever for 3 days"
-Good reply: "Sorry about your child! A 3-day fever needs checking - could be malaria or another infection. Reduce the fever with a cool wet cloth and give plenty of water. Please take them to clinic today."
-
-### 5. DON'T DO THIS
-- Don't diagnose with certainty
-- Don't name specific medicines
-- Don't cause excessive panic
-- Don't write long responses (SMS!)
-- Don't forget to encourage hospital/clinic visit
-
-### 6. HEALTH INFORMATION YOU KNOW
-{health_context}
-
-Remember: You are FIRST aid. Hospital is where they'll get proper examination."""
+Jibu fupi kwa Kiswahili (sentensi 2-4):"""
 
 
-def _build_health_context(user_message: str, lang: str) -> str:
-    """Build relevant health context from knowledge base."""
-    conditions = get_relevant_conditions(user_message)
-    
-    if not conditions:
-        return ""
-    
-    context_parts = []
-    for condition in conditions[:3]:  # Max 3 conditions to keep prompt manageable
-        if condition in HEALTH_KNOWLEDGE:
-            info = HEALTH_KNOWLEDGE[condition]
-            name = info["names"].get(lang, info["names"]["sw"])
-            symptoms = info["symptoms"].get(lang, info["symptoms"]["sw"])
-            first_aid = info["first_aid"].get(lang, info["first_aid"]["sw"])
-            danger = info["danger_signs"].get(lang, info["danger_signs"]["sw"])
-            
-            context_parts.append(f"""
-{name}:
-- Dalili: {', '.join(symptoms[:4])}
-- Huduma ya kwanza: {'; '.join(first_aid[:3])}
-- Dalili za hatari: {', '.join(danger[:2])}
-""" if lang == "sw" else f"""
-{name}:
-- Symptoms: {', '.join(symptoms[:4])}
-- First aid: {'; '.join(first_aid[:3])}
-- Danger signs: {', '.join(danger[:2])}
-""")
-    
-    return "\n".join(context_parts)
+# =============================================================================
+# ENGLISH PROMPT
+# =============================================================================
+
+PROMPT_EN = """You are AfyaMkononi, a health advisor via SMS.
+
+KEY RULES:
+1. Reply in simple everyday English
+2. Keep it SHORT: 2-4 sentences only
+3. Start with empathy: "Sorry to hear" or "Don't worry"
+4. Explain what symptoms MIGHT indicate (never diagnose with certainty)
+5. Give simple first aid
+6. End: encourage getting checked
+
+HEALTH INFORMATION:
+
+DIZZINESS AND SEEING DARKNESS:
+- Causes: Blood pressure (high or low), low blood sugar, anemia, dehydration, fatigue
+- First aid: Sit/lie down immediately, sip water slowly, eat something sugary
+- Danger: Frequent fainting, severe headache, numbness, fast heartbeat - hospital
+
+FEVER AND CHILLS:
+- Causes: Malaria, typhoid, flu, infections
+- First aid: Rest, lots of fluids, cool cloth on forehead
+- Danger: Fever 3+ days, confusion, yellow eyes - hospital for testing
+
+HEADACHE:
+- Causes: Fatigue, blood pressure, fever, dehydration, eye strain
+- First aid: Rest, water, dark quiet room
+- Danger: Sudden severe headache, stiff neck, vomiting - hospital
+
+COUGH:
+- Causes: Cold, pneumonia, TB, allergies
+- First aid: Warm fluids, honey and lemon, rest
+- Danger: Cough 2+ weeks, blood, breathing difficulty - hospital for TB test
+
+DIARRHEA AND VOMITING:
+- Causes: Bad food, contaminated water, infections
+- First aid: ORS or water+sugar+salt IMMEDIATELY, light food
+- Danger: Sunken eyes, no urination, blood - hospital FAST
+
+STOMACH PAIN:
+- Causes: Gastritis, typhoid, UTI, appendix
+- First aid: Rest, water, light food
+- Danger: Very severe pain, fever, vomiting blood - hospital
+
+BLOOD PRESSURE:
+- Symptoms: Headache (back of head), dizziness, nosebleed
+- First aid: Rest, avoid salt, stay calm
+- Danger: Numbness on one side, face drooping, speech problems - hospital NOW (stroke)
+
+DIABETES:
+- Symptoms: Very thirsty, frequent urination, fatigue, wounds not healing
+- Low sugar help: Give juice or sugar quickly
+- Danger: Unconscious, severe shaking - hospital
+
+PREGNANCY:
+- Danger: Vaginal bleeding, severe pain, baby not moving, severe swelling - hospital NOW
+
+OTHER QUESTIONS:
+- Non-health questions: "Sorry, I'm a health advisor only. Can I help with a health question?"
+- History questions (e.g., "when did malaria start"): Answer with your knowledge - malaria has existed for thousands of years, spread by mosquitoes.
+
+User: "{user_message}"
+
+Short reply in English (2-4 sentences):"""
 
 
 async def ask_gemini(user_message: str, lang: str = "sw") -> str:
-    """
-    Generate AI response that is:
-    - Accurate and medically sound
-    - Compassionate and encouraging
-    - Appropriately urgent without panic
-    - Language-matched (Swahili or English)
-    - Short enough for SMS (2-4 sentences)
-    """
+    """Generate accurate, compassionate health guidance."""
     
-    # Build context from health knowledge base
-    health_context = _build_health_context(user_message, lang)
-    
-    # Select and format system prompt
-    system_template = SYSTEM_SW if lang == "sw" else SYSTEM_EN
-    system = system_template.format(health_context=health_context if health_context else "Tumia ujuzi wako wa jumla wa afya." if lang == "sw" else "Use your general health knowledge.")
-    
-    # Build the prompt
-    if lang == "sw":
-        prompt = f"""{system}
-
----
-Mtumiaji ameandika: "{user_message}"
-
-Jibu kwa Kiswahili rahisi (sentensi 2-4 tu):"""
-    else:
-        prompt = f"""{system}
-
----
-User wrote: "{user_message}"
-
-Reply in simple English (2-4 sentences only):"""
+    # Select prompt based on language
+    prompt = PROMPT_SW.format(user_message=user_message) if lang == "sw" else PROMPT_EN.format(user_message=user_message)
 
     try:
         model = _get_model()
         response = await model.generate_content_async(prompt)
         text = response.text.strip()
         
-        # Clean up response
-        text = text.replace("**", "").replace("*", "").replace("#", "").replace("•", "-")
+        # Clean up formatting
+        text = text.replace("**", "").replace("*", "").replace("#", "")
         
-        # Remove any "Jibu:" or "Reply:" prefix the model might add
-        for prefix in ["Jibu:", "Reply:", "Response:", "Jibu zuri:", "Good reply:"]:
+        # Remove any prefix
+        for prefix in ["Jibu:", "Reply:", "Response:"]:
             if text.startswith(prefix):
                 text = text[len(prefix):].strip()
         
-        # Ensure reasonable length for SMS (max ~320 chars for 2 SMS)
-        if len(text) > 320:
-            # Find last complete sentence within limit
-            text = text[:320]
-            last_period = text.rfind('.')
-            last_question = text.rfind('?')
-            last_exclaim = text.rfind('!')
-            cut_point = max(last_period, last_question, last_exclaim)
-            if cut_point > 100:
-                text = text[:cut_point + 1]
+        # Limit length for SMS
+        if len(text) > 300:
+            text = text[:300]
+            last_end = max(text.rfind('.'), text.rfind('?'), text.rfind('!'))
+            if last_end > 100:
+                text = text[:last_end + 1]
         
         return text
 
     except Exception as e:
-        # Friendly error messages
         if lang == "sw":
-            return "Samahani, kuna tatizo la muda. Kama una wasiwasi wa afya, tafadhali fika kituo cha afya kilicho karibu."
-        return "Sorry, temporary issue. If you have health concerns, please visit your nearest health center."
-
-
-async def get_health_info(condition: str, lang: str = "sw") -> str:
-    """Get formatted health information about a specific condition."""
-    if condition not in HEALTH_KNOWLEDGE:
-        if lang == "sw":
-            return "Samahani, sina taarifa kuhusu hilo. Fika kituo cha afya kwa msaada."
-        return "Sorry, I don't have information about that. Visit a health center for help."
-    
-    info = HEALTH_KNOWLEDGE[condition]
-    name = info["names"].get(lang, info["names"]["sw"])
-    desc = info["description"].get(lang, info["description"]["sw"])
-    first_aid = info["first_aid"].get(lang, info["first_aid"]["sw"])
-    
-    if lang == "sw":
-        response = f"{name}: {desc}\n\nMsaada wa kwanza:\n"
-        for step in first_aid[:3]:
-            response += f"- {step}\n"
-        response += "\nFika kituo cha afya kwa uchunguzi zaidi."
-    else:
-        response = f"{name}: {desc}\n\nFirst aid:\n"
-        for step in first_aid[:3]:
-            response += f"- {step}\n"
-        response += "\nVisit health center for proper examination."
-    
-    return response
+            return "Samahani, kuna tatizo la kiufundi. Kama una wasiwasi wa afya, fika kituo cha afya kilicho karibu."
+        return "Sorry, technical issue. If you have health concerns, please visit your nearest health center."
