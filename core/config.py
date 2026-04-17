@@ -10,7 +10,7 @@ AT_SHORTCODE = os.getenv("AT_SHORTCODE", "*24929#")
 
 # Google Gemini
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-GEMINI_MODEL   = "gemini-2.5-flash-preview-04-17"
+GEMINI_MODEL   = "gemini-2.5-flash"
 
 # Supabase
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
