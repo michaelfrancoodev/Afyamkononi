@@ -1,64 +1,138 @@
+"""
+AfyaMkononi SMS Parser
+Intelligent parsing of incoming SMS messages for health guidance.
+"""
+
 from services.health_data import classify_sms_keywords
 from core.constants import LANG_SW, LANG_EN
 
-# Red flag words - EMERGENCY situations
-RED_FLAG_WORDS_SW = [
-    "fahamu", "kuanguka", "degedege", "mshtuko",
-    "kushindwa kupumua", "damu nyingi", "kufa", "hana fahamu",
-    "hapumui", "damu", "ajali",
-]
-RED_FLAG_WORDS_EN = [
-    "unconscious", "fainted", "seizure", "convulsion",
-    "not breathing", "heavy bleeding", "dying", "collapsed",
-    "cant breathe", "accident", "bleeding",
+# =============================================================================
+# EMERGENCY DETECTION - Life-threatening situations
+# =============================================================================
+
+# Swahili emergency keywords (specific phrases indicating true emergency)
+RED_FLAG_PHRASES_SW = [
+    "hana fahamu", "amepoteza fahamu", "hapumui", "hawezi kupumua",
+    "degedege", "mshtuko", "ameanguka", "damu nyingi", 
+    "amezimia", "haonyeshi dalili", "amefariki", "kufa",
+    "kifafa", "hawezi kuamka", "ganzi mwili wote"
 ]
 
-# Greeting words to detect casual conversation starters
+# English emergency keywords
+RED_FLAG_PHRASES_EN = [
+    "unconscious", "not breathing", "cant breathe", "cannot breathe",
+    "seizure", "convulsion", "heavy bleeding", "collapsed", "fainted",
+    "not responding", "dying", "passed out", "severe bleeding",
+    "heart attack", "stroke", "cant wake up"
+]
+
+# =============================================================================
+# GREETING DETECTION
+# =============================================================================
+
 GREETINGS_SW = [
     "habari", "mambo", "vipi", "salama", "shikamoo", "hujambo",
-    "niaje", "sema", "za leo", "nzuri", "poa", "safi",
+    "niaje", "sema", "poa", "safi", "nzuri", "za leo", "halo"
 ]
+
 GREETINGS_EN = [
-    "hi", "hello", "hey", "good morning", "good evening", 
-    "how are you", "whats up", "sup", "yo",
+    "hi", "hello", "hey", "good morning", "good afternoon", "good evening", 
+    "how are you", "whats up", "sup", "yo", "hii", "helo"
 ]
 
-# English markers for language detection
-EN_MARKERS = [
-    "fever", "cough", "pain", "help", "sick", "vomit", "diarrhea", 
-    "blood", "headache", "stomach", "doctor", "hospital", "clinic",
-    "i have", "i am", "my", "feeling", "hurts", "ache",
-    "hello", "hi", "please", "thank", "yes", "no", "the", "is", "are",
+# =============================================================================
+# LANGUAGE DETECTION - Improved accuracy
+# =============================================================================
+
+# Strong English indicators (words that clearly indicate English)
+STRONG_EN_MARKERS = [
+    "i have", "i am", "i feel", "my child", "my baby", "feeling",
+    "help me", "please help", "what is", "how do", "can you",
+    "headache", "stomach", "fever", "cough", "pain", "sick",
+    "doctor", "hospital", "clinic", "medicine", "treatment",
+    "the", "and", "but", "with", "for", "this", "that"
 ]
 
-# Swahili markers
-SW_MARKERS = [
-    "nina", "mimi", "homa", "kichwa", "tumbo", "kuumwa", "maumivu",
-    "daktari", "hospitali", "zahanati", "dalili", "ugonjwa",
-    "habari", "asante", "tafadhali", "ndiyo", "hapana", "sana",
-    "na", "ya", "wa", "kwa", "ni", "au",
+# Strong Swahili indicators
+STRONG_SW_MARKERS = [
+    "nina", "nina", "mimi", "mtoto wangu", "mwanangu", "naomba",
+    "nisaidie", "nini", "vipi", "kwa nini", "je", "hii",
+    "homa", "kichwa", "tumbo", "maumivu", "kikohozi", "kuhara",
+    "daktari", "hospitali", "zahanati", "dawa", "tiba",
+    "na", "ya", "wa", "kwa", "ni", "au", "lakini", "sana"
 ]
 
-# Short responses for common situations
-EMERGENCY_SW = "DHARURA! Dalili hizi ni hatari. Hospitali SASA! Usisubiri."
-EMERGENCY_EN = "EMERGENCY! These signs are dangerous. Hospital NOW! Don't wait."
+# Common words that appear in both (ignore for detection)
+NEUTRAL_WORDS = ["ok", "sms", "afya", "health"]
 
-GREETING_SW = "Habari! Mimi ni AfyaMkononi. Nikuasaidie nini leo?"
-GREETING_EN = "Hi! I'm AfyaMkononi. How can I help you today?"
+# =============================================================================
+# RESPONSE TEMPLATES - Compassionate, informative
+# =============================================================================
+
+# Emergency response - serious but not panic-inducing
+EMERGENCY_SW = """Dalili hizi ni muhimu sana na zinahitaji msaada wa haraka.
+
+Tafadhali fika hospitali SASA au omba mtu akupeleke. Usisubiri - kila dakika ni muhimu.
+
+Mungu akubariki."""
+
+EMERGENCY_EN = """These symptoms are very serious and need urgent attention.
+
+Please get to hospital NOW or ask someone to take you. Don't wait - every minute matters.
+
+Take care."""
+
+# Greeting responses - warm and inviting
+GREETING_SW = "Habari! Mimi ni AfyaMkononi, msaidizi wako wa afya. Nikuasaidie nini leo? Niambie unavyojisikia."
+
+GREETING_EN = "Hi there! I'm AfyaMkononi, your health assistant. How can I help you today? Tell me how you're feeling."
+
+# Help/info responses
+HELP_SW = """AfyaMkononi - Msaada wa Afya kwa SMS
+
+Niambie unavyojisikia au dalili unazoziona. Mfano:
+- "Nina homa na maumivu ya kichwa"
+- "Mtoto anakohoa sana"
+- "Nahisi kizunguzungu"
+
+Nitakusaidia na ushauri wa kwanza."""
+
+HELP_EN = """AfyaMkononi - Health Help via SMS
+
+Tell me how you're feeling or what symptoms you have. Example:
+- "I have fever and headache"
+- "My child is coughing a lot"
+- "I feel dizzy"
+
+I'll give you first-aid guidance."""
 
 
 def detect_language(text: str) -> str:
-    """Detect language based on word markers - improved accuracy."""
+    """
+    Detect language based on word markers.
+    Returns the language the user wrote in so we respond in the same language.
+    """
     text_lower = text.lower()
     
-    # Count English markers
-    en_count = sum(1 for w in EN_MARKERS if w in text_lower)
+    # Count strong English markers
+    en_count = sum(1 for phrase in STRONG_EN_MARKERS if phrase in text_lower)
     
-    # Count Swahili markers
-    sw_count = sum(1 for w in SW_MARKERS if w in text_lower)
+    # Count strong Swahili markers
+    sw_count = sum(1 for phrase in STRONG_SW_MARKERS if phrase in text_lower)
     
-    # If clearly more English, return English
-    if en_count > sw_count + 1:
+    # Check for clear English patterns
+    english_patterns = ["i ", "i'm", "my ", "is ", "are ", "the ", "have ", "feel "]
+    en_pattern_count = sum(1 for p in english_patterns if p in text_lower)
+    
+    # Check for clear Swahili patterns
+    swahili_patterns = ["nina", "mimi", "wangu", "yangu", "kwa ", "na ", "ya "]
+    sw_pattern_count = sum(1 for p in swahili_patterns if p in text_lower)
+    
+    total_en = en_count + en_pattern_count
+    total_sw = sw_count + sw_pattern_count
+    
+    # If clearly more English indicators, return English
+    if total_en > total_sw:
         return LANG_EN
     
     # Default to Swahili (most users in Tanzania/Kenya)
@@ -66,70 +140,109 @@ def detect_language(text: str) -> str:
 
 
 def is_greeting(text: str, lang: str) -> bool:
-    """Check if message is a simple greeting."""
+    """Check if message is a simple greeting or hello."""
     text_lower = text.lower().strip()
+    words = text_lower.split()
     
-    # Very short messages with greeting words
-    greetings = GREETINGS_SW if lang == LANG_SW else GREETINGS_EN
-    
-    # Check if it's just a greeting (short message)
-    if len(text_lower) < 20:
+    # Very short messages (1-3 words) that are greetings
+    if len(words) <= 3:
+        greetings = GREETINGS_SW + GREETINGS_EN  # Check both languages
         return any(g in text_lower for g in greetings)
     
     return False
 
 
-def has_red_flags(text: str, lang: str) -> bool:
-    """Check for emergency/danger keywords."""
+def is_help_request(text: str) -> bool:
+    """Check if user is asking for help/info about the service."""
+    text_lower = text.lower().strip()
+    help_words = ["help", "msaada", "info", "taarifa", "how", "what", "nini", "vipi", "menu"]
+    
+    if len(text_lower) < 15:
+        return any(w in text_lower for w in help_words)
+    return False
+
+
+def has_red_flags(text: str) -> bool:
+    """
+    Check for TRUE emergency situations.
+    Only flags genuine emergencies, not just mentions of symptoms.
+    """
     text_lower = text.lower()
-    flags = RED_FLAG_WORDS_SW if lang == LANG_SW else RED_FLAG_WORDS_EN
-    return any(f in text_lower for f in flags)
+    
+    # Check Swahili emergency phrases
+    for phrase in RED_FLAG_PHRASES_SW:
+        if phrase in text_lower:
+            return True
+    
+    # Check English emergency phrases
+    for phrase in RED_FLAG_PHRASES_EN:
+        if phrase in text_lower:
+            return True
+    
+    return False
 
 
 def parse(sms_text: str) -> dict:
-    """Parse SMS and determine response type.
+    """
+    Parse incoming SMS and determine how to respond.
     
     Returns dict with:
-    - lang: detected language
-    - disease: classified disease (if any)
-    - is_emergency: True if red flags detected
+    - lang: detected language (sw/en) - we respond in same language
+    - disease: classified disease category (if identifiable)
+    - is_emergency: True if genuine emergency detected
     - is_greeting: True if simple greeting
+    - is_help: True if asking about the service
     - use_ai: True if should use AI for response
     - response: pre-set response (if not using AI)
     """
-    lang = detect_language(sms_text)
+    text = sms_text.strip()
+    lang = detect_language(text)
 
-    # Check for emergency first - highest priority
-    if has_red_flags(sms_text, lang):
+    # 1. Check for TRUE emergency first - highest priority
+    if has_red_flags(text):
         return {
             "lang": lang,
             "disease": None,
             "is_emergency": True,
             "is_greeting": False,
+            "is_help": False,
             "use_ai": False,
             "response": EMERGENCY_SW if lang == LANG_SW else EMERGENCY_EN,
         }
 
-    # Check for simple greeting
-    if is_greeting(sms_text, lang):
+    # 2. Check for simple greeting (habari, hi, hello, etc.)
+    if is_greeting(text, lang):
         return {
             "lang": lang,
             "disease": None,
             "is_emergency": False,
             "is_greeting": True,
+            "is_help": False,
             "use_ai": False,
             "response": GREETING_SW if lang == LANG_SW else GREETING_EN,
         }
 
-    # Classify disease keywords for context
-    disease = classify_sms_keywords(sms_text)
+    # 3. Check for help/info request
+    if is_help_request(text):
+        return {
+            "lang": lang,
+            "disease": None,
+            "is_emergency": False,
+            "is_greeting": False,
+            "is_help": True,
+            "use_ai": False,
+            "response": HELP_SW if lang == LANG_SW else HELP_EN,
+        }
 
-    # Use AI for health questions
+    # 4. For health questions - use AI with context from knowledge base
+    disease = classify_sms_keywords(text)
+
     return {
         "lang": lang,
         "disease": disease,
         "is_emergency": False,
         "is_greeting": False,
+        "is_help": False,
         "use_ai": True,
         "response": None,
     }

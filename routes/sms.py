@@ -47,7 +47,11 @@ async def sms_handler(
         elif parsed.get("is_greeting"):
             reply = parsed["response"]
             severity = "green"
+        elif parsed.get("is_help"):
+            reply = parsed["response"]
+            severity = "green"
         elif parsed["use_ai"]:
+            # Use AI for health questions - will respond in same language
             reply = await ask_gemini(text.strip(), lang)
             severity = _guess_severity(reply)
         else:
